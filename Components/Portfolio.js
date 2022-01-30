@@ -3,8 +3,28 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { coins } from "../static/coins";
 import CoinComponent from "./Coin";
 import BalanceChart from "./Balance";
+import { useEffect, useState } from "react";
 
-const Portfolio = () => {
+const Portfolio = ({ walletAddress, sanityTokens, thirdWebToken }) => {
+  const [wallet, setWallet] = useState(0);
+  const tokenToUsd = {};
+
+  for (let token of sanityTokens) {
+    tokenToUsd[token.contractAddress] = Number(token.usdPrcie);
+  }
+
+  useEffect(() => {
+    const calTotal = async () => {
+      const total = await Promise.all(
+        thirdWebToken.map(async (token) => {
+          const balance = await token.balanceOf(walletAddress);
+          return Number(balance.displayValue) * tokenToUsd[token.address];
+        })
+      );
+      setWallet(total.reduce((a, b) => a + b, 0));
+    };
+    return calTotal();
+  }, [thirdWebToken, sanityTokens]);
   return (
     <Wrapper>
       <Content>
@@ -14,8 +34,7 @@ const Portfolio = () => {
               <BalanceTitle>Portfolio Balance</BalanceTitle>
               <BalanceValue>
                 {"$"}
-                {/* {walletBalance.toLocaleString()} */}
-                46,000
+                {wallet.toLocaleString()}
               </BalanceValue>
             </Balance>
           </div>
@@ -29,24 +48,24 @@ const Portfolio = () => {
           <Table>
             <TableItem>
               <TableRow>
-                <div style={{ flex: 3 }}>Name</div>
-                <div style={{ flex: 2 }}>Balance</div>
-                <div style={{ flex: 1 }}>Price</div>
-                <div style={{ flex: 1 }}>Allocation</div>
-                <div style={{ flex: 0 }}>
+                <th style={{ flex: 3 }}>Name</th>
+                <th style={{ flex: 2 }}>Balance</th>
+                <th style={{ flex: 1 }}>Price</th>
+                <th style={{ flex: 1 }}>Allocation</th>
+                <th style={{ flex: 0 }}>
                   <BsThreeDotsVertical />
-                </div>
+                </th>
               </TableRow>
             </TableItem>
             <Divider />
-            <div>
+            <>
               {coins.map((coin, index) => (
-                <div key={index}>
+                <tbody key={index}>
                   <CoinComponent coin={coin} />
                   <Divider />
-                </div>
+                </tbody>
               ))}
-            </div>
+            </>
           </Table>
         </PortfolioTable>
       </Content>

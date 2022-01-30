@@ -2,10 +2,10 @@ import styled from "styled-components";
 import Portfolio from "./Portfolio";
 import Promots from "./Promots";
 
-const MainContent = () => {
+const MainContent = (props) => {
   return (
     <Wrapper>
-      <Portfolio />
+      <Portfolio {...props} />
       <Promots />
     </Wrapper>
   );
