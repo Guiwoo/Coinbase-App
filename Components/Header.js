@@ -1,6 +1,13 @@
 import styled from "styled-components";
+import Modal from "react-modal";
+import TransferModal from "./modal/TransferModal";
+import {Router, useRouter} from "next/router";
+import Link from "next/link";
 
-const Header = ({ walletAddress, connectWallet }) => {
+Modal.setAppElement("#__next");
+
+const Header = ({walletAddress, connectWallet}) => {
+  const rotuer = useRouter();
   return (
     <Wrapper>
       <Title>Assets</Title>
@@ -11,11 +18,19 @@ const Header = ({ walletAddress, connectWallet }) => {
             {walletAddress.slice(0, 7)}...{walletAddress.slice(35)}
           </WalletAddress>
         </WalletLink>
-        <Btn style={{ backgroundColor: "#3773f5", color: "black" }}>
+        <Btn style={{backgroundColor: "#3773f5", color: "black"}}>
           Buy / Sell
         </Btn>
-        <Btn>Send / Recive</Btn>
+        <Link href="/?transfer=1">
+          <a>
+            <Btn>Send / Recive</Btn>
+          </a>
+        </Link>
       </ButtonsContainer>
+      <Modal
+        isOpen={!!rotuer.query.transfer}
+        onRequestClose={() => Router.push("/")}
+      ></Modal>
     </Wrapper>
   );
 };
@@ -41,6 +56,18 @@ const ButtonsContainer = styled.div`
 `;
 
 const Btn = styled.button`
+  border: 1px solid #282b2f;
+  padding: 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  border-radius: 0.4rem;
+  margin-right: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ABtn = styled.a`
   border: 1px solid #282b2f;
   padding: 0.8rem;
   font-size: 1.3rem;
