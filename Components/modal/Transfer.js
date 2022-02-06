@@ -44,6 +44,7 @@ const Transfer = ({
     console.log("sending Crypto..");
 
     if (activeThird && amount && recipient) {
+      setAction("transfering");
       const tx = await activeThird.transfer(
         recipient,
         amount.toString().concat("000000000000000000")
