@@ -23,7 +23,6 @@ const Transfer = ({
       (token) => token.address === selectedToken.contractAddress
     );
     setActiveThird(activeToken);
-    console.log(selectedToken);
   }, [thirdWebTokens, selectedToken]);
 
   useEffect(() => {
@@ -66,7 +65,7 @@ const Transfer = ({
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          <span>{selectedToken?.symbol}</span>
+          <span>{selectedToken?.symbol.toUpperCase()}</span>
         </FlexInputContainer>
         <Warning style={{color: amount && "#0a0b0d"}}>
           Amount is a required field
@@ -87,7 +86,7 @@ const Transfer = ({
         <Divder />
         <Row>
           <FieldName>Pay with</FieldName>
-          <CoinSeletList>
+          <CoinSeletList onClick={() => setAction("select")}>
             <Icon>
               <img src={imgUrl} alt="" />
             </Icon>
