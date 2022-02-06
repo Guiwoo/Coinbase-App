@@ -1,6 +1,6 @@
-import { ThirdwebSDK } from "@3rdweb/sdk";
-import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import {ThirdwebSDK} from "@3rdweb/sdk";
+import {ethers} from "ethers";
+import {useEffect, useState} from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import MainContent from "./MainContent";
@@ -15,7 +15,7 @@ const sdk = new ThirdwebSDK(
   )
 );
 
-const Dashboard = ({ address }) => {
+const Dashboard = ({address}) => {
   const [token, setToken] = useState([]);
   const [thirdWebToken, setThirdWebToken] = useState([]);
   useEffect(() => {
@@ -23,7 +23,7 @@ const Dashboard = ({ address }) => {
       const coins = await fetch(
         "https://evnpf345.api.sanity.io/v1/data/query/production?query=*%5B_type%3D%3D%22coins%22%5D%7B%0A%20%20name%2C%0A%20%20usdPrcie%2C%0A%20%20contractAddress%2C%0A%20%20symbol%2C%0A%20%20logo%0A%7D"
       );
-      const { result } = await coins.json();
+      const {result} = await coins.json();
       setToken(result);
       setThirdWebToken(
         result.map((token) => sdk.getTokenModule(token.contractAddress))
